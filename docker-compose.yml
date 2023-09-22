@@ -25,12 +25,14 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
 
-  nodejs-app1:
+  nodejs-app-producer:
     build:
       context: ./appProducer
     container_name: appProducer
+    ports:
+      - "3000:3000"
     volumes:
       - ./appProducer:/app
-    command: node producer.js
+    command: node index.js
     depends_on:
       - kafka

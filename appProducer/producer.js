@@ -1,7 +1,5 @@
 const { Kafka } = require("kafkajs");
 
-console.log("!!!!!! starting kafka producer");
-
 // Initialize a Kafka client
 const kafka = new Kafka({
   clientId: "my-demo-customer-producer",
@@ -12,31 +10,19 @@ const kafka = new Kafka({
 const producer = kafka.producer();
 
 // Produce a message to a Kafka topic
-const produceMessage = async () => {
-  console.log("!!!!!! kafka producer about to connect");
-
+exports.produceMessage = async ({ message }) => {
   await producer.connect();
   console.log("!!!!!! kafka producer connection success");
 
-  await producer.send({
+  const sendResult = await producer.send({
     topic: "demo-customer-topic",
     messages: [
       {
-        value: "Hello, Kafka! from producer",
+        value: message,
       },
     ],
   });
-
-  await producer.send({
-    topic: "demo-customer-topic",
-    messages: [
-      {
-        value: "Hello, Kafka! from producer",
-      },
-    ],
-  });
-
+  console.log("Send Result", sendResult);
   await producer.disconnect();
+  console.log("Producer disconnected");
 };
-
-produceMessage().catch(console.error);
